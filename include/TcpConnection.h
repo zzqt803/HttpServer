@@ -3,6 +3,7 @@
 #include "Buffer.h"
 #include "Callbacks.h"
 #include "InetAddr.h"
+#include <any>
 #include <memory>
 
 class Channel;
@@ -50,6 +51,10 @@ public:
   void connectEstablished();
   void connectDestroyed();
 
+  void setContext(std::any context) { context_ = std::move(context); }
+  const std::any &getContext() { return context_; }
+  std::any *getMutableContext() { return &context_; }
+
 private:
   enum StateE { kDisconnected, kConnecting, kConnected, kDisconnecting };
   void handleRead();
@@ -79,6 +84,8 @@ private:
   WriteCompleteCallback writeCompleteCallback_;
   Buffer inputBuffer_;
   Buffer outputBuffer_;
+
+  std::any context_;
 };
 
 using TcpConnectionPtr = std::shared_ptr<TcpConnection>;

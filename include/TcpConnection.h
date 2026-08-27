@@ -3,12 +3,18 @@
 #include "Buffer.h"
 #include "Callbacks.h"
 #include "InetAddr.h"
+#include "http/HttpContext.h"
+
 #include <any>
 #include <memory>
+#include <variant>
 
 class Channel;
 class Socket;
 class EventLoop;
+
+//零开销多态
+using ContextVariant = std::variant<HttpContext>;
 
 class TcpConnection : public std::enable_shared_from_this<TcpConnection> {
 public:
@@ -51,9 +57,8 @@ public:
   void connectEstablished();
   void connectDestroyed();
 
-  void setContext(std::any context) { context_ = std::move(context); }
-  const std::any &getContext() { return context_; }
-  std::any *getMutableContext() { return &context_; }
+  void setContext(ContextVariant context) { context_ = std::move(context); }
+  ContextVariant &getContext() { return context_; }
 
 private:
   enum StateE { kDisconnected, kConnecting, kConnected, kDisconnecting };
@@ -85,7 +90,7 @@ private:
   Buffer inputBuffer_;
   Buffer outputBuffer_;
 
-  std::any context_;
+  ContextVariant context_;
 };
 
 using TcpConnectionPtr = std::shared_ptr<TcpConnection>;

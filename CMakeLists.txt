@@ -30,10 +30,14 @@ set(SOURCE_FILES
     src/Socket.cpp
     src/TcpConnection.cpp
     src/TcpServer.cpp
+    src/http/HttpContext.cpp
+    src/http/HttpRequest.cpp
+    src/http/HttpResponse.cpp
+    src/http/HttpServer.cpp
 )
 
 # add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
-add_executable(net_test main.cpp ${SOURCE_FILES})
+add_executable(http_server http_server.cpp ${SOURCE_FILES})
 
-target_link_libraries(net_test PRIVATE spdlog::spdlog)
+target_link_libraries(http_server PRIVATE spdlog::spdlog)

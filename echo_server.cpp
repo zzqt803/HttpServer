@@ -9,7 +9,7 @@ int main() {
   initLogger();
   EventLoop loop;
   InetAddr listenAddr(8888);
-  TcpServer server(&loop, listenAddr, "test");
+  TcpServer server(&loop, listenAddr, "echo");
   server.setThreadNum(5);
   server.setConnectionCallback([](const TcpConnectionPtr &conn) {
     LOG_INFO("testServer [{} <-> {}] is {}", conn->peerAddr().toIpPort(),

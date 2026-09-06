@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Launch with LLDB",
+            "type": "lldb",              // 注意这里不再是 cppdbg
+            "request": "launch",
+            "program": "${workspaceFolder}/build/http_server", // 换成你的 target 名字
+            "args": [],                  // 命令行参数，比如 ["-p", "8080"]
+            "cwd": "${workspaceFolder}",
+            "terminal": "integrated"
+        }
+    ]
+}

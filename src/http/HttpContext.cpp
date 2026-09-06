@@ -2,17 +2,17 @@
 #include "util/Logger.h"
 
 int HttpContext::parse(Buffer *buf) {
-  LOG_DEBUG("HttpContext::parse: start parse");
+  // LOG_DEBUG("HttpContext::parse: start parse");
   bool stop = false;
   while (!stop) {
     const char *crlf{nullptr};
     string line{};
     switch (state_) {
     case kExpectRequestLine: {
-      LOG_DEBUG("解析请求行");
+      // LOG_DEBUG("解析请求行");
       crlf = buf->findCRLF();
       if (!crlf) {
-        LOG_DEBUG("无crlf");
+        // LOG_DEBUG("无crlf");
         return 1;
       }
       line = string(buf->peek(), crlf - buf->peek());
@@ -33,7 +33,7 @@ int HttpContext::parse(Buffer *buf) {
       break;
     }
     case kExpectHeaders: {
-      LOG_DEBUG("解析请求头");
+      // LOG_DEBUG("解析请求头");
       crlf = buf->findCRLF();
       //空行
       if (crlf == buf->peek()) {
@@ -42,8 +42,7 @@ int HttpContext::parse(Buffer *buf) {
         break;
       }
       if (!crlf) {
-        int size = buf->beginWrite() - buf->peek();
-        LOG_DEBUG("剩余 {} 字节", size);
+        // LOG_DEBUG("剩余 {} 字节", size);
         return 1;
       }
       //正常
@@ -52,14 +51,14 @@ int HttpContext::parse(Buffer *buf) {
       int colon = line.find(":");
       string key = line.substr(0, colon);
       string value{};
-      if (colon + 2 <= line.size()) {
+      if (colon + 2 <= static_cast<int>(line.size())) {
         value = line.substr(colon + 2);
       }
       request_.insertHeader(key, value);
       break;
     }
     case kExpectBody: {
-      LOG_DEBUG("解析请求体");
+      // LOG_DEBUG("解析请求体");
       auto te = request_.getHeader("Transfer-Encoding");
       if (te.has_value() && te.value() == "chunked") {
         // Http1.1分块解析，暂不实现

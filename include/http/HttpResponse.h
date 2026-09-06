@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <string>
 #include <sys/types.h>
 #include <unordered_map>
@@ -22,6 +23,8 @@ public:
     headers_[key] = value;
   }
   void setBody(const string &b) { body_ = b; }
+
+  size_t getBodyLength() const { return body_.length(); }
 
 private:
   bool close_{false};

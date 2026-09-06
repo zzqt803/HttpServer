@@ -4,6 +4,7 @@
 #include "EventLoop.h"
 #include "InetAddr.h"
 #include "Socket.h"
+#include "util/CurrentThread.h"
 #include "util/Logger.h"
 
 #include <errno.h>
@@ -212,6 +213,7 @@ void TcpConnection::connectEstablished() {
   channel_->tie(shared_from_this());
   channel_->enableReading();
 
+  LOG_DEBUG("thread {} 执行了onConection",CurrentThread ::tid());
   connectionCallback_(shared_from_this());
 }
 
@@ -221,7 +223,7 @@ void TcpConnection::connectDestroyed() {
     setState(kDisconnected);
     channel_->disableAll();
 
-    connectionCallback_(shared_from_this());
+    //connectionCallback_(shared_from_this());
   }
   channel_->remove();
 }
@@ -279,7 +281,7 @@ void TcpConnection::handleClose() {
   channel_->disableAll();
 
   TcpConnectionPtr guardThis(shared_from_this());
-  connectionCallback_(guardThis);
+  //connectionCallback_(guardThis);
   // must be the last line
   closeCallback_(guardThis);
 }

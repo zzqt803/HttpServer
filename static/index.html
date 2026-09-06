@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的 C++ 高性能服务器</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(145deg, #0f172a 0%, #1e293b 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            color: #e2e8f0;
+        }
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(12px);
+            padding: 3rem 5rem;
+            border-radius: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+            border: 1px solid rgba(100, 116, 139, 0.3);
+            text-align: center;
+            max-width: 600px;
+        }
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(to right, #60a5fa, #a78bfa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .subtitle {
+            font-size: 1.1rem;
+            color: #94a3b8;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px dashed #475569;
+            padding-bottom: 1.5rem;
+        }
+        .badge {
+            display: inline-block;
+            background: #334155;
+            padding: 0.3rem 1.2rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: #cbd5e1;
+            border: 1px solid #475569;
+        }
+        .badge span {
+            color: #34d399;
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🚀 服务已启动</h1>
+        <div class="subtitle">
+            基于 Reactor + C++17 的高性能 Web 服务器
+        </div>
+        <div class="badge">
+            ▸ 状态: <span>运行中</span>  |  协议: HTTP/1.1
+        </div>
+        <div class="footer">
+            Powered by Your Own Muduo-like Framework
+        </div>
+    </div>
+</body>
+</html>

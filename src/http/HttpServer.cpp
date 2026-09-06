@@ -15,6 +15,7 @@ HttpServer::HttpServer(EventLoop *loop, const InetAddr &listenAddr,
 }
 
 void HttpServer::onConnection(const TcpConnectionPtr &conn) {
+  LOG_DEBUG("onConnection");
   assert(conn->connected());
   conn->setContext(HttpContext());
 }
@@ -32,7 +33,7 @@ void HttpServer::processHttpContext(const TcpConnectionPtr &conn,
   if (res == 0) {
     const HttpRequest &req = ctx.getRequest();
     auto connection = req.getHeader("Connection");
-    bool close = false;
+    bool close = true;
     if (connection) {
       close = *connection == "close" ||
               (req.getVersion() == HttpRequest::VersionE::HTTP10 &&
@@ -43,10 +44,10 @@ void HttpServer::processHttpContext(const TcpConnectionPtr &conn,
     Buffer buf;
     res.appendToBuffer(&buf);
     conn->send(&buf);
+    ctx.reset();
     if (res.closeConnection()) {
       conn->shutdown();
     }
-    ctx.reset();
   } else if (res == 1) {
     LOG_DEBUG("HtppServer::onMessage: Waiting Request");
   } else {

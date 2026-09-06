@@ -38,6 +38,6 @@ set(SOURCE_FILES
 
 # add_library(${PROJECT_NAME} STATIC ${SOURCE_FILES})
 
-add_executable(http_server http_server.cpp ${SOURCE_FILES})
+add_executable(http_server example/http_server.cpp ${SOURCE_FILES})
 
 target_link_libraries(http_server PRIVATE spdlog::spdlog)

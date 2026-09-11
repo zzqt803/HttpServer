@@ -33,7 +33,7 @@ void HttpServer::processHttpContext(const TcpConnectionPtr &conn,
   if (res == 0) {
     const HttpRequest &req = ctx.getRequest();
     auto connection = req.getHeader("Connection");
-    bool close = true;
+    bool close = false;
     if (connection) {
       close = *connection == "close" ||
               (req.getVersion() == HttpRequest::VersionE::HTTP10 &&
@@ -52,7 +52,7 @@ void HttpServer::processHttpContext(const TcpConnectionPtr &conn,
     LOG_DEBUG("HtppServer::onMessage: Waiting Request");
   } else {
     LOG_DEBUG("HtppServer::onMessage: Bad Request");
-    conn->send("HTTP/1.1 400 Bad Request/r/n/r/n");
+    conn->send("HTTP/1.1 400 Bad Request\r\n\r\n");
     conn->shutdown();
   }
 }

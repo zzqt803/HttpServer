@@ -5,6 +5,8 @@
 #include "TcpServer.h"
 #include "http/HttpContext.h"
 
+#include "util/ThreadPool.h"
+
 class HttpRequest;
 class HttpResponse;
 
@@ -34,4 +36,7 @@ private:
 
   TcpServer server_;
   HttpCallback httpCallback_;
+
+  //业务线程池
+  ThreadPool workersPool_;
 };

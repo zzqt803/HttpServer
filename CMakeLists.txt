@@ -30,6 +30,7 @@ set(SOURCE_FILES
     src/Socket.cpp
     src/TcpConnection.cpp
     src/TcpServer.cpp
+    # src/TimerQueue.cpp
     src/http/HttpContext.cpp
     src/http/HttpRequest.cpp
     src/http/HttpResponse.cpp

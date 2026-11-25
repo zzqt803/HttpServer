@@ -1,12 +1,14 @@
 #pragma once
 
+
+#include "TcpConnectionPool.h"
 #include "util/CurrentThread.h"
 
+#include <atomic>
 #include <functional>
 #include <memory>
-#include <vector>
-#include <atomic>
 #include <mutex>
+#include <vector>
 
 class Channel;
 class EpollPoller;
@@ -63,4 +65,8 @@ private:
 
   std::mutex mutex_;
   std::vector<Functor> pendingFunctors_;
+
+  //测试
+public:
+  TcpConnectionPool connectionPool_;
 };

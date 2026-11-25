@@ -34,7 +34,7 @@ void TcpServer::setThreadNum(int num) {
   threadPool_->setThreadNum(num);
 }
 
-//Acceptor的listen被调用，监听socket被注册
+// Acceptor的listen被调用，监听socket被注册
 void TcpServer::start() {
   if (started_.exchange(1) == 0) {
     threadPool_->start(threadInitCallback_);
@@ -56,15 +56,36 @@ void TcpServer::newConnection(int sockfd, const InetAddr &peerAddr) {
   LOG_INFO("TcpServer::newConnection [{}] - new connection [{}] from {}", name_,
            connName, peerAddr.toIpPort());
   InetAddr localAddr(Socket::getLocalAddr(sockfd));
-  TcpConnectionPtr conn(
-      new TcpConnection(ioLoop, connName, sockfd, localAddr, peerAddr));
+  // ############# 不加内存池 ################
+  //  TcpConnectionPtr conn(
+  //      new TcpConnection(ioLoop, connName, sockfd, localAddr, peerAddr));
+
+  // ############# 一个内存池 ################
+  // void *mem = connectionPool_.acquire();
+  // TcpConnection *raw =
+  //     new (mem) TcpConnection(ioLoop, connName, sockfd, localAddr, peerAddr);
+  // TcpConnectionPtr conn(raw, [this](TcpConnection *p) {
+  //   p->~TcpConnection();
+  //   connectionPool_.release(p);
+  // });
+
+  // ############# 每个loop一个内存池(不加锁) ################
+  void *mem = ioLoop->connectionPool_.acquire();
+  TcpConnection *raw =
+      new (mem) TcpConnection(ioLoop, connName, sockfd, localAddr, peerAddr);
+  TcpConnectionPtr conn(raw, [](TcpConnection *p) {
+    EventLoop *loop = p->getLoop();
+    p->~TcpConnection();
+    loop->connectionPool_.release(p);
+  });
+
   connections_[connName] = conn;
   conn->setConnectionCallback(connectionCallback_);
   conn->setMessageCallback(messageCallback_);
   conn->setWriteCompleteCallback(writeCompleteCallback_);
   conn->setCloseCallback(std::bind(&TcpServer::removeConnection, this, _1));
 
-  //连接socket在这里被注册
+  // 连接socket在这里被注册
   ioLoop->runInLoop(std::bind(&TcpConnection::connectEstablished, conn));
 }
 
